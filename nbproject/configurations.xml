@@ -5,10 +5,12 @@
                    displayName="Исходные файлы"
                    projectFiles="true">
       <itemPath>main.c</itemPath>
+      <itemPath>sniffer.c</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Файлы заголовков"
                    projectFiles="true">
+      <itemPath>sniffer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Файлы ресурсов"
@@ -35,8 +37,15 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <commandLine>-lpcap</commandLine>
+        </cTool>
       </compileType>
       <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="sniffer.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="sniffer.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -60,6 +69,10 @@
         </asmTool>
       </compileType>
       <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="sniffer.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="sniffer.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
