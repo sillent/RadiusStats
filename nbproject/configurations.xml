@@ -4,12 +4,14 @@
     <logicalFolder name="SourceFiles"
                    displayName="Исходные файлы"
                    projectFiles="true">
+      <itemPath>callback_sniff.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>sniffer.c</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Файлы заголовков"
                    projectFiles="true">
+      <itemPath>callback_sniff.h</itemPath>
       <itemPath>sniffer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -38,9 +40,13 @@
       </toolsSet>
       <compileType>
         <cTool>
-          <commandLine>-lpcap</commandLine>
+          <commandLine>-lpcap -lpthread</commandLine>
         </cTool>
       </compileType>
+      <item path="callback_sniff.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="callback_sniff.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="sniffer.c" ex="false" tool="0" flavor2="0">
@@ -68,6 +74,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="callback_sniff.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="callback_sniff.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="sniffer.c" ex="false" tool="0" flavor2="0">

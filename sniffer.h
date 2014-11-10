@@ -14,7 +14,9 @@
 
 
 pcap_if_t* findDevice();
-pcap_t* sniffInit(char* iface);
+pcap_t* sniffInit(char* iface, char *filter);
 pcap_t* openDeviceToSniff(pcap_if_t *device);
+int compileFilterToHandler(char *filter, pcap_t *handle);
+int startSniff(pcap_t *handle);
 #endif	/* SNIFFER_H */
 

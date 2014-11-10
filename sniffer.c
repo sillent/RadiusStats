@@ -1,8 +1,13 @@
 #include <string.h>
 #include "sniffer.h"
+#include "callback_sniff.h"
 
 char errbuf[PCAP_ERRBUF_SIZE];
-pcap_t* sniffInit(char *iface) {
+struct bpf_program fp;
+bpf_u_int32 net;
+bpf_u_int32 mask;
+char *devName;
+pcap_t* sniffInit(char *iface, char *filter) {
     pcap_t *handle;
     pcap_if_t *dev;
     dev=findDevice();  
@@ -11,7 +16,8 @@ pcap_t* sniffInit(char *iface) {
         exit(13);
     }
     printf("%s\n",iface);
-    while (strcmp(iface, dev->name)) // ищем допустимый интерфейс для прослушки 
+//     ищем допустимый интерфейс для прослушки
+    while ((strcmp(iface, dev->name))!=0)  
     {
         dev=(pcap_if_t*)dev->next;
         if (dev==NULL){
@@ -19,8 +25,13 @@ pcap_t* sniffInit(char *iface) {
             exit(14);
         }
     }
+    devName=dev->name;
 //    открываем интерфейс на прослушку
     handle=openDeviceToSniff(dev);
+//    компилируем  и устанавливаем фильтр
+    compileFilterToHandler(filter,handle);
+//    стартуем снифер
+    startSniff(handle);
     return handle;
 }
 
@@ -30,7 +41,6 @@ pcap_if_t* findDevice() {
         fprintf(stderr, "Can't find any device. Exiting.\n");
         exit(12);
     }
-    
     return dev;
 }
 
@@ -41,5 +51,32 @@ pcap_t* openDeviceToSniff(pcap_if_t* device) {
         exit(15);
     }
     return handle;
+}
+
+int compileFilterToHandler(char *filter, pcap_t *handle) {
+    int retl, retc, rets;
+    retl=pcap_lookupnet(devName,&net,&mask,errbuf);
+    if (retl==-1) {
+        fprintf(stderr,"Can't lookupnet for device. Exiting.\n");
+        exit(17);
+    }
+    retc=pcap_compile(handle,&fp,filter,0,net);
+    if (retc==-1) {
+        fprintf(stderr,"Can't compile filter. Exiting.\n");
+        exit(16);
+    }
+    
+    rets=pcap_setfilter(handle,&fp);
+    if (rets==-1) {
+        fprintf(stderr,"Can't set filter. Exiting.\n");
+        exit(18);
+    }
+    
+    printf("retval compile: %d\n",retc);
+    return 1;
+}
+
+int startSniff(pcap_t* handle) {
+    int r=pcap_loop(handle,0,callback_sniff,NULL);
 }
 
