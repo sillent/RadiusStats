@@ -1,13 +1,13 @@
 #include <string.h>
 #include "sniffer.h"
-#include "callback_sniff.h"
 
 char errbuf[PCAP_ERRBUF_SIZE];
 struct bpf_program fp;
 bpf_u_int32 net;
 bpf_u_int32 mask;
 char *devName;
-pcap_t* sniffInit(char *iface, char *filter) {
+void* sniffInit(void* arg_t) {
+    struct snif_arg_t *arg=(struct snif_arg_t *)arg_t;
     pcap_t *handle;
     pcap_if_t *dev;
     dev=findDevice();  
@@ -15,13 +15,13 @@ pcap_t* sniffInit(char *iface, char *filter) {
         fprintf(stderr, "Can't find any readable device. Exiting.\n");
         exit(13);
     }
-    printf("%s\n",iface);
+    printf("%s\n",arg->dev);
 //     ищем допустимый интерфейс для прослушки
-    while ((strcmp(iface, dev->name))!=0)  
+    while ((strcmp(arg->dev, dev->name))!=0)  
     {
         dev=(pcap_if_t*)dev->next;
         if (dev==NULL){
-            fprintf(stderr, "Can't find device with name %s\n", iface);
+            fprintf(stderr, "Can't find device with name %s\n", arg->dev);
             exit(14);
         }
     }
@@ -29,7 +29,7 @@ pcap_t* sniffInit(char *iface, char *filter) {
 //    открываем интерфейс на прослушку
     handle=openDeviceToSniff(dev);
 //    компилируем  и устанавливаем фильтр
-    compileFilterToHandler(filter,handle);
+    compileFilterToHandler(arg->fil,handle);
 //    стартуем снифер
     startSniff(handle);
     return handle;
@@ -77,6 +77,6 @@ int compileFilterToHandler(char *filter, pcap_t *handle) {
 }
 
 int startSniff(pcap_t* handle) {
+    
     int r=pcap_loop(handle,0,callback_sniff,NULL);
 }
-

@@ -11,10 +11,15 @@
 #include <pcap.h>
 #include <stdlib.h>
 #include <netinet/ip.h>
+#include "callback_sniff.h"
 
+struct snif_arg_t {
+    char *dev;
+    char *fil;
+};
 
 pcap_if_t* findDevice();
-pcap_t* sniffInit(char* iface, char *filter);
+void* sniffInit(void* snif_arg_t);
 pcap_t* openDeviceToSniff(pcap_if_t *device);
 int compileFilterToHandler(char *filter, pcap_t *handle);
 int startSniff(pcap_t *handle);

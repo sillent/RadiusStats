@@ -4,7 +4,12 @@
  *
  * Created on 10 ноября 2014 г., 11:14
  */
-
+static long long rad_auth_req=0;
+static long long rad_auth_res=0;
+static long long rad_auth_rej=0;
+static long long rad_acct_req=0;
+static long long rad_acct_res=0;
+    
 #ifndef CALLBACK_SNIFF_H
 #define	CALLBACK_SNIFF_H
 #include <pcap.h>

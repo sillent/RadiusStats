@@ -1,12 +1,7 @@
 #include "callback_sniff.h"
 void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr, 
         const u_char *bytes) {
-    static long long rad_auth_req=0;
-    static long long rad_auth_res=0;
-    static long long rad_auth_rej=0;
-    static long long rad_acct_req=0;
-    static long long rad_acct_res=0;
-   
+ 
     const struct sniff_radius *radius;
     
     radius=(struct sniff_radius *)(bytes+SIZE_ETH_IP_UDP);
@@ -25,6 +20,7 @@ void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr,
             break;
         case ACCT_REQ:
             rad_acct_req++;
+            sleep(10);
             break;
         case ACCT_RES:
             rad_acct_res++;
@@ -32,4 +28,5 @@ void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr,
         default:
             break;
     }
+    printf("auth_req: %lld acct_req: %lld\n",rad_auth_req, rad_acct_req);
 }
