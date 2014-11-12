@@ -28,5 +28,66 @@ void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr,
         default:
             break;
     }
-    printf("auth_req: %lld acct_req: %lld\n",rad_auth_req, rad_acct_req);
+    printf("auth_req: %ld acct_req: %ld\n",rad_auth_req, rad_acct_req);
+    sendToServer(AUTH_REQ,rad_auth_req);
+}
+// структура передаваеомго сообщения
+struct msgr {
+    char name[3];
+    long long value;
+};
+void sendToServer(int type, long long count) {
+    struct msgr msgSend;
+    memset(&msgSend,0,sizeof(msgSend));
+    switch (type) {
+        case AUTH_REQ:
+            strcpy(msgSend.name,"auq");
+            msgSend.value=htobe64(count);
+            break;
+        case AUTH_RES:
+            strcpy(msgSend.name,"aur");
+            msgSend.value=htobe64(count);
+            break;
+        case AUTH_REJ:
+            strcpy(msgSend.name,"auj");
+            msgSend.value=htobe64(count);
+            break;
+        case ACCT_REQ:
+            strcpy(msgSend.name,"acq");
+            msgSend.value=htobe64(count);
+            break;
+        case ACCT_RES:
+            strcpy(msgSend.name,"acr");
+            msgSend.value=htobe64(count);
+            break;
+        default:
+            break;     
+    }
+    struct sockaddr_in server;
+    int sockfd=socket(AF_INET,SOCK_DGRAM, IPPROTO_UDP);
+    if (sockfd==-1) {
+        fprintf(stderr, "Cannot create socket on SendToServer()\n");
+        exit(EXIT_FAILURE);
+    }
+    memset(&server,0,sizeof(struct sockaddr));
+    server.sin_family=AF_INET;
+    server.sin_addr.s_addr=inet_addr("127.0.0.1");
+    server.sin_port=htons(SERVER_PORT);
+    
+    int conRet=connect(sockfd,(struct sockaddr *)&server,sizeof(server));
+    if (conRet==-1) {
+        fprintf(stderr,"Cannot connect to socket on SendToServer\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    int sendRet=sendto(sockfd,(void *)&msgSend,sizeof(msgSend),0,(struct sockaddr *)&server,sizeof(server));
+    
+    if (sendRet==-1) {
+        fprintf(stderr,"Message to server %s not send\n",inet_ntoa(server.sin_addr));
+        exit(EXIT_FAILURE);
+    }
+    close(sockfd);
+    
+    
+    
 }

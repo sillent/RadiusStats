@@ -4,16 +4,18 @@
  *
  * Created on 10 ноября 2014 г., 11:14
  */
-static long long rad_auth_req=0;
-static long long rad_auth_res=0;
-static long long rad_auth_rej=0;
-static long long rad_acct_req=0;
-static long long rad_acct_res=0;
+static unsigned long long rad_auth_req=0;
+static unsigned long long rad_auth_res=0;
+static unsigned long long rad_auth_rej=0;
+static unsigned long long rad_acct_req=0;
+static unsigned long long rad_acct_res=0;
     
+#define SERVER_PORT 5005
 #ifndef CALLBACK_SNIFF_H
 #define	CALLBACK_SNIFF_H
 #include <pcap.h>
 #include <sys/types.h>
+#include <sys/socket.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -74,6 +76,6 @@ struct sniff_radius {
 #define BE_2_LE(data) ntohs((uint16_t)data)
 
 void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char *bytes);
-
+void sendToServer(int type, long long count);
 #endif	/* CALLBACK_SNIFF_H */
 
