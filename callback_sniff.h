@@ -76,6 +76,6 @@ struct sniff_radius {
 #define BE_2_LE(data) ntohs((uint16_t)data)
 
 void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr, const u_char *bytes);
-void sendToServer(int type, long long count);
+void sendToServer(int type, unsigned long long count);
 #endif	/* CALLBACK_SNIFF_H */
 

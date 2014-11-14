@@ -15,7 +15,7 @@ void* sniffInit(void* arg_t) {
         fprintf(stderr, "Can't find any readable device. Exiting.\n");
         exit(13);
     }
-    printf("%s\n",arg->dev);
+
 //     ищем допустимый интерфейс для прослушки
     while ((strcmp(arg->dev, dev->name))!=0)  
     {
@@ -72,7 +72,6 @@ int compileFilterToHandler(char *filter, pcap_t *handle) {
         exit(18);
     }
     
-    printf("retval compile: %d\n",retc);
     return 1;
 }
 

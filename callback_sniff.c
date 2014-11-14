@@ -11,32 +11,35 @@ void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr,
     {
         case AUTH_REQ:
             rad_auth_req++;
+            sendToServer(AUTH_REQ,rad_auth_req);
             break;
         case AUTH_RES:
             rad_auth_res++;
+            sendToServer(AUTH_RES,rad_auth_res);
             break;
         case AUTH_REJ:
             rad_auth_rej++;
+            sendToServer(AUTH_REJ,rad_auth_rej);
             break;
         case ACCT_REQ:
             rad_acct_req++;
-            sleep(10);
+            sendToServer(ACCT_REQ,rad_acct_req);
             break;
         case ACCT_RES:
             rad_acct_res++;
+            sendToServer(ACCT_RES,rad_acct_res);
             break;
         default:
             break;
     }
-    printf("auth_req: %ld acct_req: %ld\n",rad_auth_req, rad_acct_req);
-    sendToServer(AUTH_REQ,rad_auth_req);
+//    printf("auth_req: %lld acct_req: %lld\n",rad_auth_req, rad_acct_req);
 }
 // структура передаваеомго сообщения
 struct msgr {
     char name[3];
     long long value;
 };
-void sendToServer(int type, long long count) {
+void sendToServer(int type, unsigned long long count) {
     struct msgr msgSend;
     memset(&msgSend,0,sizeof(msgSend));
     switch (type) {
@@ -80,14 +83,16 @@ void sendToServer(int type, long long count) {
         exit(EXIT_FAILURE);
     }
     
+    // SEND MESSAGE to SOCKET
     int sendRet=sendto(sockfd,(void *)&msgSend,sizeof(msgSend),0,(struct sockaddr *)&server,sizeof(server));
     
     if (sendRet==-1) {
         fprintf(stderr,"Message to server %s not send\n",inet_ntoa(server.sin_addr));
         exit(EXIT_FAILURE);
     }
-    close(sockfd);
-    
+    if ((close(sockfd))==-1) {
+        fprintf(stderr,"Cannot close socket\n");
+    }
     
     
 }

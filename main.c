@@ -26,8 +26,10 @@ int main(int argc, char** argv) {
     
     pthread_t threadCounter;
     int t=pthread_create(&threadCounter,NULL,&sniffInit,(void *)&argStruct);
+ 
+    // create LISTENER
+    listener();
 
-    sleep(100);
     
     
     return (EXIT_SUCCESS);
