@@ -66,6 +66,7 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <commandLine>-lpcap -lpthread</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>

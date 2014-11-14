@@ -42,7 +42,7 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=
+CFLAGS=-lpcap -lpthread
 
 # CC Compiler Flags
 CCFLAGS=
