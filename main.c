@@ -24,6 +24,16 @@ int main(int argc, char** argv) {
     argStruct.dev=deviceName;
     argStruct.fil=filter;
     
+    // send to background
+    pid_t pid;
+    pid=fork();
+    if (pid<0) {
+        exit(EXIT_FAILURE);
+    }
+    if (pid>0) {
+        exit(EXIT_SUCCESS);
+    }
+    
     pthread_t threadCounter;
     int t=pthread_create(&threadCounter,NULL,&sniffInit,(void *)&argStruct);
  
