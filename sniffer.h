@@ -1,6 +1,6 @@
-/* 
+/*
  * File:   sniffer.h
- * Author: santa
+ * Author: Dmitry Ulyanov
  *
  * Created on 7 ноября 2014 г., 15:23
  */

@@ -10,14 +10,14 @@ void* sniffInit(void* arg_t) {
     struct snif_arg_t *arg=(struct snif_arg_t *)arg_t;
     pcap_t *handle;
     pcap_if_t *dev;
-    dev=findDevice();  
+    dev=findDevice();
     if (dev==NULL) {
         fprintf(stderr, "Can't find any readable device. Exiting.\n");
         exit(13);
     }
 
 //     ищем допустимый интерфейс для прослушки
-    while ((strcmp(arg->dev, dev->name))!=0)  
+    while ((strcmp(arg->dev, dev->name))!=0)
     {
         dev=(pcap_if_t*)dev->next;
         if (dev==NULL){
@@ -65,17 +65,17 @@ int compileFilterToHandler(char *filter, pcap_t *handle) {
         fprintf(stderr,"Can't compile filter. Exiting.\n");
         exit(16);
     }
-    
+
     rets=pcap_setfilter(handle,&fp);
     if (rets==-1) {
         fprintf(stderr,"Can't set filter. Exiting.\n");
         exit(18);
     }
-    
+
     return 1;
 }
 
 int startSniff(pcap_t* handle) {
-    
-    int r=pcap_loop(handle,0,callback_sniff,NULL);
+    int r = pcap_loop(handle,0,callback_sniff,NULL);
+    return r;
 }

@@ -1,6 +1,6 @@
-/* 
+/*
  * File:   callback_sniff.h
- * Author: santa
+ * Author: Dmitry Ulyanov
  *
  * Created on 10 ноября 2014 г., 11:14
  */
@@ -9,7 +9,7 @@ static unsigned long long rad_auth_res=0;
 static unsigned long long rad_auth_rej=0;
 static unsigned long long rad_acct_req=0;
 static unsigned long long rad_acct_res=0;
-    
+
 #define SERVER_PORT 5005
 #ifndef CALLBACK_SNIFF_H
 #define	CALLBACK_SNIFF_H
@@ -35,7 +35,7 @@ static unsigned long long rad_acct_res=0;
 #define AUTH_REJ 3
 #define ACCT_REQ 4
 #define ACCT_RES 5
- 
+
 u_int size_ip;
 u_int size_udp_h;
 u_int size_udp;
@@ -58,7 +58,7 @@ struct sniff_ip {
     u_short ip_checksum;
     struct in_addr ip_src,ip_dst;
 };
-#define IP_HL(ip) (((ip)->ip_vhl)&0x0f)  
+#define IP_HL(ip) (((ip)->ip_vhl)&0x0f)
 #define IP_V(ip) (((ip)->ip_vhl)>>4)
 
 struct sniff_udp {

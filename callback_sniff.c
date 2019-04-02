@@ -1,9 +1,9 @@
 #include "callback_sniff.h"
 void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr, 
         const u_char *bytes) {
- 
+
     const struct sniff_radius *radius;
-    
+
     radius=(struct sniff_radius *)(bytes+SIZE_ETH_IP_UDP);
     int t=radius->r_code;
 
@@ -34,11 +34,12 @@ void callback_sniff(u_char *user, const struct pcap_pkthdr *pkthdr,
     }
 //    printf("auth_req: %lld acct_req: %lld\n",rad_auth_req, rad_acct_req);
 }
-// структура передаваеомго сообщения
+// структура передаваемого сообщения
 struct msgr {
     char name[3];
     long long value;
 };
+
 void sendToServer(int type, unsigned long long count) {
     struct msgr msgSend;
     memset(&msgSend,0,sizeof(msgSend));
@@ -64,7 +65,7 @@ void sendToServer(int type, unsigned long long count) {
             msgSend.value=htobe64(count);
             break;
         default:
-            break;     
+            break;
     }
     struct sockaddr_in server;
     int sockfd=socket(AF_INET,SOCK_DGRAM, IPPROTO_UDP);
@@ -76,16 +77,16 @@ void sendToServer(int type, unsigned long long count) {
     server.sin_family=AF_INET;
     server.sin_addr.s_addr=inet_addr("127.0.0.1");
     server.sin_port=htons(SERVER_PORT);
-    
+
     int conRet=connect(sockfd,(struct sockaddr *)&server,sizeof(server));
     if (conRet==-1) {
         fprintf(stderr,"Cannot connect to socket on SendToServer\n");
         exit(EXIT_FAILURE);
     }
-    
+
     // SEND MESSAGE to SOCKET
     int sendRet=sendto(sockfd,(void *)&msgSend,sizeof(msgSend),0,(struct sockaddr *)&server,sizeof(server));
-    
+
     if (sendRet==-1) {
         fprintf(stderr,"Message to server %s not send\n",inet_ntoa(server.sin_addr));
         exit(EXIT_FAILURE);
@@ -93,6 +94,4 @@ void sendToServer(int type, unsigned long long count) {
     if ((close(sockfd))==-1) {
         fprintf(stderr,"Cannot close socket\n");
     }
-    
-    
 }

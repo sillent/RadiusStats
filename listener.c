@@ -39,7 +39,7 @@ int listener() {
     serv_addr.sin_family=AF_INET;
     serv_addr.sin_addr.s_addr=inet_addr("127.0.0.1");
     serv_addr.sin_port=htons(SERVER_PORT);
-    
+
     int rb=bind(sockfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr));
     if (rb<0) {
         fprintf(stderr,"Cannot bind socket on listener()\n");
@@ -58,7 +58,7 @@ int listener() {
 void grepp(struct mesg_t data,struct sockaddr_in respondto) {
     struct mesg_t d=data;
     if (strcmp(d.mes,"auq")==0) {
-        auth_req=be64toh(d.arg);   
+        auth_req=be64toh(d.arg);
     }
     if (strcmp(d.mes,"aur")==0) {
         auth_res=be64toh(d.arg);
